@@ -1,6 +1,7 @@
 package lwb.hdfs.service;
 
 import lwb.hdfs.entity.DataNode;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -8,7 +9,8 @@ import java.util.*;
 @Service
 public class DataNodeService {
 
-    private static final int DUPLICATE_NUM = 2;
+    @Value("${data.duplicate.num}")
+    private int DUPLICATE_NUM;
 
     private List<DataNode> dataNodeList = new ArrayList<>();
     private Map<String, Set<DataNode>> dataNodeMap = new TreeMap<>();

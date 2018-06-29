@@ -2,6 +2,7 @@ package lwb.hdfs.service;
 
 import lwb.hdfs.entity.File;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -10,7 +11,8 @@ import java.util.TreeMap;
 @Service
 public class FileService {
 
-    private static final int BLOCK_SIZE = 5;
+    @Value("${data.block.size}")
+    private int BLOCK_SIZE;
     private Map<String, Integer> fileBlockNumMap = new TreeMap<>();
     private final DataNodeService dataNodeService;
 

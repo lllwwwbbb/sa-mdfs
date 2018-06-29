@@ -2,6 +2,7 @@ package lwb.hdfs.web;
 
 import lwb.hdfs.entity.FileEntry;
 import lwb.hdfs.service.FileManagerService;
+import lwb.hdfs.service.FileService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,10 +30,12 @@ public class FileManagerController {
     }
 
     private final FileManagerService fileManagerService;
+    private final FileService fileService;
 
     @Autowired
-    public FileManagerController(FileManagerService fileManagerService) {
+    public FileManagerController(FileManagerService fileManagerService, FileService fileService) {
         this.fileManagerService = fileManagerService;
+        this.fileService = fileService;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/**")
@@ -43,8 +46,11 @@ public class FileManagerController {
             return "NONE";
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", fileEntry.getName());
-        jsonObject.put("content", fileEntry.getContent());
         jsonObject.put("isDirectory", fileEntry.isDirectory());
+        if (fileEntry.isDirectory())
+            jsonObject.put("content", fileEntry.getContent());
+        else // get File from DataNode
+            jsonObject.put("content", fileService.getFile(filePath));
         return jsonObject.toString();
     }
 
